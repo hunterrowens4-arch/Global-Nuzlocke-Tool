@@ -1,6 +1,6 @@
 import json
 
-with open('data/pokedex.json') as f:
+with open('data/pokedex.json', 'r', encoding='utf-8') as f:
     pokedex = json.load(f)
 
 caught = [
@@ -36,7 +36,8 @@ n = 0
 
 roster = []
 for species in caught:
-    mon = next((p for p in pokedex if p['name']['english'].lower() == species.lower()), None)
+    mon = next(
+        (p for p in pokedex if p['name']['english'].lower() == species.lower()), None)
     if mon:
         base = mon.get('base', {})
         stats = {
@@ -50,16 +51,17 @@ for species in caught:
 
         roster.append({
             'no': mon.get('id', 0),
-            'name': mon['name']['english'].capitalize(),
             'nickname': None,
+            'name': mon['name']['english'].capitalize(),
             'types': [t.capitalize() for t in mon.get('type', [])],
             'stats': stats,
-            'status': 'alive',
-            'legend': False,
+            'origin': 'red',
+            'availability': ['red'],
             'championships': 0,
-            'origin': 1,
+            'legend': False,
             'inheritance_count': 0,
-            'inheritance': []
+            'inheritance': [],
+            'status': 'alive',
         })
     else:
         n += 1
