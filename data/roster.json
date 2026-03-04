@@ -1,8 +1,8 @@
 [
   {
     "no": 69,
+    "nickname": "Cernunnos",
     "name": "Bellsprout",
-    "nickname": null,
     "types": [
       "Grass",
       "Poison"
@@ -15,17 +15,20 @@
       "spd": 30,
       "spe": 40
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 12,
+    "nickname": "Aphrodite",
     "name": "Butterfree",
-    "nickname": null,
     "types": [
       "Bug",
       "Flying"
@@ -38,17 +41,20 @@
       "spd": 80,
       "spe": 70
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 132,
+    "nickname": "Loki",
     "name": "Ditto",
-    "nickname": null,
     "types": [
       "Normal"
     ],
@@ -60,17 +66,20 @@
       "spd": 48,
       "spe": 48
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 148,
+    "nickname": "Hermes",
     "name": "Dragonair",
-    "nickname": null,
     "types": [
       "Dragon"
     ],
@@ -82,17 +91,20 @@
       "spd": 70,
       "spe": 70
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 23,
+    "nickname": "Jormungandr",
     "name": "Ekans",
-    "nickname": null,
     "types": [
       "Poison"
     ],
@@ -104,17 +116,20 @@
       "spd": 54,
       "spe": 55
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "dead"
   },
   {
     "no": 22,
+    "nickname": "Zephyrus",
     "name": "Fearow",
-    "nickname": null,
     "types": [
       "Normal",
       "Flying"
@@ -127,17 +142,20 @@
       "spd": 61,
       "spe": 100
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 92,
+    "nickname": "Morpheus",
     "name": "Gastly",
-    "nickname": null,
     "types": [
       "Ghost",
       "Poison"
@@ -150,17 +168,20 @@
       "spd": 35,
       "spe": 80
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 75,
+    "nickname": "Atlas",
     "name": "Graveler",
-    "nickname": null,
     "types": [
       "Rock",
       "Ground"
@@ -173,17 +194,20 @@
       "spd": 45,
       "spe": 35
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 88,
+    "nickname": "Chaos",
     "name": "Grimer",
-    "nickname": null,
     "types": [
       "Poison"
     ],
@@ -195,17 +219,20 @@
       "spd": 50,
       "spe": 25
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 64,
+    "nickname": "Yahweh",
     "name": "Kadabra",
-    "nickname": null,
     "types": [
       "Psychic"
     ],
@@ -217,17 +244,20 @@
       "spd": 70,
       "spe": 105
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 98,
+    "nickname": "Poseidon",
     "name": "Krabby",
-    "nickname": null,
     "types": [
       "Water"
     ],
@@ -239,17 +269,20 @@
       "spd": 25,
       "spe": 50
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 108,
+    "nickname": "Baku",
     "name": "Lickitung",
-    "nickname": null,
     "types": [
       "Normal"
     ],
@@ -261,17 +294,20 @@
       "spd": 75,
       "spe": 30
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 81,
+    "nickname": "Hyperion",
     "name": "Magnemite",
-    "nickname": null,
     "types": [
       "Electric",
       "Steel"
@@ -284,17 +320,20 @@
       "spd": 55,
       "spe": 45
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 105,
+    "nickname": "Hel",
     "name": "Marowak",
-    "nickname": null,
     "types": [
       "Ground"
     ],
@@ -306,17 +345,20 @@
       "spd": 80,
       "spe": 45
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 32,
+    "nickname": "Odin",
     "name": "Nidoran\u2642",
-    "nickname": null,
     "types": [
       "Poison"
     ],
@@ -328,17 +370,20 @@
       "spd": 40,
       "spe": 50
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 30,
+    "nickname": "Freya",
     "name": "Nidorina",
-    "nickname": null,
     "types": [
       "Poison"
     ],
@@ -350,17 +395,20 @@
       "spd": 55,
       "spe": 56
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 47,
+    "nickname": "Nergal",
     "name": "Parasect",
-    "nickname": null,
     "types": [
       "Bug",
       "Grass"
@@ -373,17 +421,20 @@
       "spd": 80,
       "spe": 30
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 17,
+    "nickname": "Horus",
     "name": "Pidgeotto",
-    "nickname": null,
     "types": [
       "Normal",
       "Flying"
@@ -396,17 +447,20 @@
       "spd": 50,
       "spe": 71
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 27,
+    "nickname": "Geb",
     "name": "Sandshrew",
-    "nickname": null,
     "types": [
       "Ground"
     ],
@@ -418,17 +472,20 @@
       "spd": 30,
       "spe": 40
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 86,
+    "nickname": "Skadi",
     "name": "Seel",
-    "nickname": null,
     "types": [
       "Water"
     ],
@@ -440,17 +497,20 @@
       "spd": 70,
       "spe": 45
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "dead"
   },
   {
     "no": 90,
+    "nickname": "Triton",
     "name": "Shellder",
-    "nickname": null,
     "types": [
       "Water"
     ],
@@ -462,17 +522,20 @@
       "spd": 25,
       "spe": 40
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "dead"
   },
   {
     "no": 73,
+    "nickname": "Kraken",
     "name": "Tentacruel",
-    "nickname": null,
     "types": [
       "Water",
       "Poison"
@@ -485,17 +548,20 @@
       "spd": 120,
       "spe": 100
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 37,
+    "nickname": "Kitsune",
     "name": "Vulpix",
-    "nickname": null,
     "types": [
       "Fire"
     ],
@@ -507,17 +573,20 @@
       "spd": 65,
       "spe": 65
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 8,
+    "nickname": "Genbu",
     "name": "Wartortle",
-    "nickname": null,
     "types": [
       "Water"
     ],
@@ -529,17 +598,20 @@
       "spd": 80,
       "spe": 58
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   },
   {
     "no": 13,
+    "nickname": "Dionysus",
     "name": "Weedle",
-    "nickname": null,
     "types": [
       "Bug",
       "Poison"
@@ -552,17 +624,20 @@
       "spd": 20,
       "spe": 50
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "dead"
   },
   {
     "no": 41,
+    "nickname": "Camazotz",
     "name": "Zubat",
-    "nickname": null,
     "types": [
       "Poison",
       "Flying"
@@ -575,11 +650,14 @@
       "spd": 40,
       "spe": 55
     },
-    "status": "alive",
-    "legend": false,
+    "origin": "red",
+    "availability": [
+      "red"
+    ],
     "championships": 0,
-    "origin": 1,
+    "legend": false,
     "inheritance_count": 0,
-    "inheritance": []
+    "inheritance": [],
+    "status": "alive"
   }
 ]
