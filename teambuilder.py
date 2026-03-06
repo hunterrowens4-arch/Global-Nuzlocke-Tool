@@ -41,16 +41,56 @@ def show_filters(pokedex, roster, current_leg):
     filter_options = """ 
                        Show Roster Options
 -----------------------------------------------------------------
-All           - Show all pokemon in your roster !NOT IMPLEMENTED!
-Alive         - Show all alive pokemon in your roster !NOT IMPLEMENTED!
-Dead          - Show all dead pokemon in your roster !NOT IMPLEMENTED!
-Legends       - Show all legendary pokemon in your roster !NOT IMPLEMENTED!
-Type          - Show pokemon in your roster by type !NOT IMPLEMENTED!
-Availability  - Show pokemon in your roster by availability !NOT IMPLEMENTED!
+All           - Show all pokemon in your roster
+Alive         - Show all alive pokemon in your roster
+Dead          - Show all dead pokemon in your roster
+Type          - Show pokemon in your roster by type
+Availabile    - Show pokemon in your roster by availability !NOT IMPLEMENTED!
 Championships - Show pokemon in your roster by championship count !NOT IMPLEMENTED!
 BST           - Show pokemon in your roster by base stat total !NOT IMPLEMENTED!
 """
     print(filter_options)
+
+
+def show_all_roster(pokedex, roster, current_leg):
+    for p in roster:
+        print(f'{p['nickname']} - {p['name']}, {p['status']}, championships: {p['championships']}\n')
+
+
+def show_alive(pokedex, roster, current_leg):
+    for p in roster:
+        if p['status'] == 'dead':
+            continue
+        print(f'{p['nickname']} - {p['name']}, championships: {p['championships']}')
+
+
+def show_dead(pokedex, roster, current_leg):
+    for p in roster:
+        if p['status'] == 'alive':
+            continue
+        print(f'{p['nickname']} - {p['name']}, championships: {p['championships']}')
+
+
+def show_type(pokedex, roster, current_leg):
+    n = 0
+    target_type = input('\nWhat type would you like to see?\n>>').capitalize()
+    print('')
+    for p in roster:
+        if target_type not in p['types']:
+            continue
+        p_type1 = p['types'][0]
+        p_type2 = None
+        try:
+            p_type2 = p['types'][1]
+        except:
+            pass
+        if p_type2:
+            print(f'{p['nickname']} - {p['name']}, {p_type1}-{p_type2}, {p['status']}, championships: {p['championships']}')
+        else:
+            print(f'{p['nickname']} - {p['name']}, {p_type1}, {p['status']}, championships: {p['championships']}')
+        n += 1
+    if n == 0:
+        print('No pokemon were found in the roster by that type.')
 
 
 def add_pokemon_to_roster(pokedex, roster, current_leg):
@@ -252,6 +292,7 @@ def show_legacy_options(pokedex, roster, current_leg):
     legacy_options = """
             Legacy Options
 --------------------------------------
+Legacy - show your legends !NOT IMPLEMENTED!
 Champion - mark a Pokemon as a champ !NOT IMPLEMENTED!
 HOF - save a team to the hall of fame !NOT IMPLEMENTED!
 Legend - start a Pokemon's legacy !NOT IMPLEMENTED!
@@ -292,6 +333,10 @@ commands = {
     'legacy': show_legacy_options,
     'reset': reset_roster,
     'show': show_filters,
+    'all': show_all_roster,
+    'alive': show_alive,
+    'dead': show_dead,
+    'type': show_type,
     'add': add_pokemon_to_roster,
     'evolve': evolve_pokemon,
     'kill': kill_pokemon,
@@ -299,6 +344,10 @@ commands = {
     'nickname': edit_nickname,
     'delete': delete_pokemon
 }
+
+
+types = ['normal', 'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy']
+
 
 config = load_json('data/config.json')
 pokedex = load_json('data/pokedex.json')
@@ -311,11 +360,11 @@ print(
     f'You are currently playing attempt #{config["attempt"]} of Pokemon {current_leg.title()}.')
 print(f'You currently have {len(roster)} pokemon available in this leg.')
 print(
-    f'{sum(1 for p in roster if p["status"] == "dead")} pokemon have died in total.\n')
+    f'{sum(1 for p in roster if p["status"] == "dead")} pokemon have died in total.')
 
 while True:
     action = input(
-        'What would you like to do? (Type "Help" for a list of options)\n>>').lower().strip()
+        '\nWhat would you like to do? (Type "Help" for a list of options)\n>>').lower().strip()
     if action in commands:
         commands[action](pokedex, roster, current_leg)
     elif action == 'new':
@@ -340,9 +389,10 @@ while True:
             f'Last Pokemon in Roster: {roster[-1] if roster else "Roster is empty."}')
         print(f'Evo Target: {roster[3]}')
     else:
-        print('Invalid action. Type "Help" for a list of options.')
+        print('Invalid action. Type "Help" for a list of options.\n')
 
 # way later ideas:
+#     team functionality
 #     recommend optimal team of 6
 #     risk analysis before important battles
 #     web based version / GUI / mobile app
