@@ -12,68 +12,66 @@ def show_help(pokedex, roster, current_leg):
       Violet's Nuzlocke Companion Commands
 ------------------------------------------------
 Help    - Show this list of options
-Roster  - Show options for managing your roster
+Roster  - View and manage your roster
 Analyze - Show options for analyzing your roster
 Legacy  - Show options for managing your legacy
 New     - Start a new leg, or a fresh run
 Reset   - Reset your roster
 Exit    - Save and quit
-Quit    - Exit without saving
-"""
+Quit    - Exit without saving"""
     print(help_text)
-
-
-def show_roster_options(pokedex, roster, current_leg):
-    roster_options = """
-              Roster Options
-------------------------------------------
-Show   - Show your current roster
-Add    - Add a pokemon to your roster
-Evolve - Evolve a pokemon in your roster
-Kill   - Mark a pokemon as dead
-Edit   - Edit a pokemon in your roster
-Delete - Delete a pokemon from your roster
-"""
-    print(roster_options)
-
 
 def show_filters(pokedex, roster, current_leg):
     filter_options = """ 
                        Show Roster Options
 -----------------------------------------------------------------
-All           - Show all pokemon in your roster
 Alive         - Show all alive pokemon in your roster
 Dead          - Show all dead pokemon in your roster
 Type          - Show pokemon in your roster by type
-Availabile    - Show pokemon in your roster by availability !NOT IMPLEMENTED!
+Availabile    - Show pokemon in your roster by availability
 Championships - Show pokemon in your roster by championship count !NOT IMPLEMENTED!
 BST           - Show pokemon in your roster by base stat total !NOT IMPLEMENTED!
 """
     print(filter_options)
 
 
-def show_all_roster(pokedex, roster, current_leg):
+def show_roster(pokedex, roster, current_leg):
     for p in roster:
-        print(f'{p['nickname']} - {p['name']}, {p['status']}, championships: {p['championships']}\n')
+        print(f'{p['nickname']} - {p['name']}, {p['status']}, championships: {p['championships']}')
+    while True:
+        print('\nWhat would you like to do with your roster?')
+        roster_choice = input('(add / evolve / kill / edit / delete / filter / done)\n>> ').lower().strip()
+        if roster_choice in roster_commands:
+            roster_commands[roster_choice](pokedex, roster, current_leg)
+        elif roster_choice == 'done':
+            break
+        else:
+            print('Invalid choice, please enter a valid selection.')
 
 
 def show_alive(pokedex, roster, current_leg):
+    n = 0
     for p in roster:
         if p['status'] == 'dead':
             continue
         print(f'{p['nickname']} - {p['name']}, championships: {p['championships']}')
+        n += 1
+    print(f'You have {n} living Pokemon.')
 
 
 def show_dead(pokedex, roster, current_leg):
+    n = 0
     for p in roster:
         if p['status'] == 'alive':
             continue
         print(f'{p['nickname']} - {p['name']}, championships: {p['championships']}')
+        n += 1
+    print(f'You have {n} dead Pokemon.')
 
 
 def show_type(pokedex, roster, current_leg):
     n = 0
-    target_type = input('\nWhat type would you like to see?\n>>').capitalize()
+    target_type = input('\nWhat type would you like to see?\n>> ').capitalize()
     print('')
     for p in roster:
         if target_type not in p['types']:
@@ -91,17 +89,44 @@ def show_type(pokedex, roster, current_leg):
         n += 1
     if n == 0:
         print('No pokemon were found in the roster by that type.')
+    print(f'You have {n} {target_type} type Pokemon.')
+
+
+def show_bst(pokedex, roster, current_leg):
+    stat_list = list()
+    while True:
+        print('\nWhich stat would you like to see?')
+        stat = input('HP | Atk | Def | Spa | Spd | Spe\n>> ').lower().strip()
+        if stat in ['hp', 'atk', 'def', 'spa', 'spd', 'spe']:
+            for p in roster:
+                stat_list.append((p['nickname'], p['name'], p['stats'][stat]))
+        else:
+            print('Invalid selection, please provide a valid selection.')
+        sorted_stat_list = sorted(stat_list, key=lambda x: x[2], reverse=True)
+        for mon in sorted_stat_list:
+            print(f'{mon[0]} - {mon[1]}, {stat.capitalize()}: {mon[2]}')
+        break
+
+
+def show_available(pokedex, roster, current_leg):
+    for p in roster:
+        if current_leg not in p['availability']:
+            continue
+        print(f'{p['nickname']} - {p['name']}, {p['status']}, championships: {p['championships']}')
 
 
 def add_pokemon_to_roster(pokedex, roster, current_leg):
     mon = None
     while mon == None:
         species = input(
-            'What species of Pokemon did you catch?\n>>').lower().strip()
+            '\nWhat species of Pokemon did you catch?\n>> ').lower().strip()
         if species == 'exit':
             return
+        if any(p['name'].lower() == species for p in roster):
+            print('\nThat pokemon is already in your roster.')
+            continue
         nickname = input(
-            'What nickname would you like to give it? (Press enter to skip)\n>>').strip()
+            '\nWhat nickname would you like to give it? (Press enter to skip)\n>> ').strip()
         for p in pokedex:
             if p['name']['english'].lower() == species:
                 mon = p
@@ -133,14 +158,14 @@ def add_pokemon_to_roster(pokedex, roster, current_leg):
     })
 
     print(
-        f'Successfully added {mon["name"]["english"].capitalize()} to your roster!')
+        f'\nSuccessfully added {mon["name"]["english"].capitalize()} to your roster!')
     print(roster[-1])
     print(f'You now have {len(roster)} pokemon in your roster.')
 
 
 def evolve_pokemon(pokedex, roster, current_leg):
     target = input(
-        'Which Pokemon would you like to evolve? (Enter nickname or species)\n>>').strip().lower()
+        '\nWhich Pokemon would you like to evolve? (Enter nickname or species)\n>>').strip().lower()
     mon = None
     for p in roster:
         if p['nickname'].lower() == target:
@@ -163,7 +188,7 @@ def evolve_pokemon(pokedex, roster, current_leg):
             f'{mon["name"]} cannot evolve or its evolution is not in the pokedex.')
         return
     confirmation = input(
-        f'Are you sure you want to evolve {mon["nickname"] if mon["nickname"] else mon["name"]} into {evo["name"]["english"]}? (y/n)\n>>').strip().lower()
+        f'\nAre you sure you want to evolve {mon["nickname"] if mon["nickname"] else mon["name"]} into {evo["name"]["english"]}? (y/n)\n>>').strip().lower()
     if confirmation == 'y':
         mon['no'] = evo['id']
         mon['name'] = evo['name']['english'].capitalize()
@@ -178,7 +203,7 @@ def evolve_pokemon(pokedex, roster, current_leg):
             'spe': base.get('Speed', 0)
         }
         print(
-            f'Successfully evolved into {mon["name"]}!')
+            f'\nSuccessfully evolved into {mon["name"]}!')
     else:
         print('Evolution cancelled.')
 
@@ -204,22 +229,10 @@ def kill_pokemon(pokedex, roster, current_leg):
     mon['status'] = 'dead'
     print(f'{mon["nickname"] if mon["nickname"] else mon["name"]} is now dead.')
 
-
-def show_edit_options(pokedex, roster, current_leg):
-    edit_options = """
-                     Edit Options
-------------------------------------------------------
-Nickname          - Edit a pokemon's nickname
-Inheritance Count - Edit a pokemon's inheritance count !NOT IMPLEMENTED!
-Inherited Moves   - Edit a pokemon's inherited moves !NOT IMPLEMENTED!
-"""
-    print(edit_options)
-
-
 def edit_nickname(pokedex, roster, current_leg):
     while True:
         target = input(
-            'Which Pokemon would you like to rename?\n>>').strip().lower()
+            '\nWhich Pokemon would you like to rename?\n>>').strip().lower()
         if target == 'exit':
             return
         mon = None
@@ -234,17 +247,17 @@ def edit_nickname(pokedex, roster, current_leg):
             print(f'No Pokemon by that name or species was found in the roster.')
             continue
         new_nickname = input(
-            f'What would you like to change {mon["nickname"] if mon["nickname"] else mon["name"]}\'s nickname to? (press Enter to cancel)\n>>').strip()
+            f'\nWhat would you like to change {mon["nickname"] if mon["nickname"] else mon["name"]}\'s nickname to? (press Enter to cancel)\n>>').strip()
         if new_nickname:
             mon['nickname'] = new_nickname
             print(
-                f'Successfully changed nickname to {new_nickname}.')
+                f'\nSuccessfully changed nickname to {new_nickname}.')
         else:
             print(f'{mon["nickname"]}\'s nickname was not changed.')
         confirmation = False
         while confirmation == False:
             again = input(
-                'Would you like to rename another Pokemon? (y/n)\n>>').strip().lower()
+                '\nWould you like to rename another Pokemon? (y/n)\n>>').strip().lower()
             if again == 'y':
                 confirmation = True
             elif again == 'n':
@@ -255,10 +268,10 @@ def edit_nickname(pokedex, roster, current_leg):
 
 def delete_pokemon(pokedex, roster, current_leg):
     target = input(
-        'Which Pokemon would you like to delete from your roster? (Enter nickname or species)\n>>').strip().lower()
+        '\nWhich Pokemon would you like to delete from your roster? (Enter nickname or species)\n>> ').strip().lower()
     mon = None
     for p in roster:
-        if p['nickname'] == target:
+        if p['nickname'].lower() == target:
             mon = p
             break
         elif p['name'].lower() == target:
@@ -268,11 +281,11 @@ def delete_pokemon(pokedex, roster, current_leg):
         print(f'No Pokemon by that name or species was found in the roster.')
         return
     confirmation = input(
-        f'Are you sure you want to delete {mon["nickname"] if mon["nickname"] else mon["name"]} from your roster? This action cannot be undone, except by the "quit" command. (y/n)\n>>').strip().lower()
+        f'\nAre you sure you want to delete {mon["nickname"] if mon["nickname"] else mon["name"]} from your roster? This action cannot be undone, except by the "quit" command. (y/n)\n>> ').strip().lower()
     if confirmation == 'y':
         roster.remove(mon)
         print(
-            f'{mon["nickname"] if mon["nickname"] else mon["name"]} has been deleted from your roster.')
+            f'\n{mon["nickname"] if mon["nickname"] else mon["name"]} has been deleted from your roster.')
     else:
         print('Deletion cancelled.')
 
@@ -301,15 +314,15 @@ Legend - start a Pokemon's legacy !NOT IMPLEMENTED!
 
 
 def new_game(pokedex, roster, current_leg):
-    current_leg = input('What leg are you starting?\n>>').lower().strip()
+    current_leg = input('\nWhat leg are you starting?\n>> ').lower().strip()
     config['current_leg'] = current_leg
-    print(f'You are now playing Pokemon {config['current_leg'].title()}')
+    print(f'\nYou are now playing Pokemon {config['current_leg'].title()}')
     if current_leg in ['red', 'blue', 'yellow']:
         config['attempt'] += 1
         print(
-            f'This is attempt #{config['attempt']} of Pokemon {current_leg.title()}.')
+            f'This is attempt #{config['attempt']} of Pokemon {current_leg.title()}.\n')
         reset = input(
-            'Would you like to reset your roster? (y/n)\n>>').lower().strip()
+            'Would you like to reset your roster? (y/n)\n>> ').lower().strip()
         if reset == 'y':
             roster.clear()
             print('Roster has been reset.')
@@ -318,7 +331,7 @@ def new_game(pokedex, roster, current_leg):
 
 def reset_roster(pokedex, roster, current_leg):
     confirmation = input(
-        'Are you sure you want to reset your roster? This action cannot be undone, other than command: "quit". (y/n)\n>>').lower().strip()
+        '\nAre you sure you want to reset your roster? This action cannot be undone, other than command: "quit". (y/n)\n>> ').lower().strip()
     if confirmation == 'y':
         roster.clear()
         print('Roster has been reset.')
@@ -327,22 +340,35 @@ def reset_roster(pokedex, roster, current_leg):
 
 
 commands = {
+    'available': show_available,
+    'bst': show_bst,
     'help': show_help,
-    'roster': show_roster_options,
+    'roster': show_roster,
     'analyze': show_analysis_options,
     'legacy': show_legacy_options,
     'reset': reset_roster,
-    'show': show_filters,
-    'all': show_all_roster,
     'alive': show_alive,
     'dead': show_dead,
     'type': show_type,
     'add': add_pokemon_to_roster,
     'evolve': evolve_pokemon,
     'kill': kill_pokemon,
-    'edit': show_edit_options,
-    'nickname': edit_nickname,
+    'edit': edit_nickname,
     'delete': delete_pokemon
+}
+
+roster_commands = {
+    'add': add_pokemon_to_roster,
+    'alive': show_alive,
+    'available': show_available,
+    'bst': show_bst,
+    'dead': show_dead,
+    'delete': delete_pokemon,
+    'edit': edit_nickname,
+    'evolve': evolve_pokemon,
+    'filter': show_filters,
+    'kill': kill_pokemon,
+    'type': show_type
 }
 
 
@@ -358,13 +384,20 @@ current_leg = config['current_leg']
 print('\nWelcome to Violet\'s Nuzlocke Companion!\n')
 print(
     f'You are currently playing attempt #{config["attempt"]} of Pokemon {current_leg.title()}.')
-print(f'You currently have {len(roster)} pokemon available in this leg.')
+print(f'You have caught {len(roster)} pokemon in total.')
 print(
     f'{sum(1 for p in roster if p["status"] == "dead")} pokemon have died in total.')
 
+a = 0
+
+for p in roster:
+    if current_leg in p['availability']:
+        a += 1
+print(f'You have {a} Pokemon available to you so far in this leg.')
+
 while True:
     action = input(
-        '\nWhat would you like to do? (Type "Help" for a list of options)\n>>').lower().strip()
+        '\nWhat would you like to do? (Type "Help" for a list of options)\n>> ').lower().strip()
     if action in commands:
         commands[action](pokedex, roster, current_leg)
     elif action == 'new':
@@ -389,7 +422,7 @@ while True:
             f'Last Pokemon in Roster: {roster[-1] if roster else "Roster is empty."}')
         print(f'Evo Target: {roster[3]}')
     else:
-        print('Invalid action. Type "Help" for a list of options.\n')
+        print('Invalid action. Type "Help" for a list of options.')
 
 # way later ideas:
 #     team functionality
