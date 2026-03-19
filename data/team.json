@@ -1,0 +1,25 @@
+[
+  {
+    "no": 94,
+    "nickname": "Morpheus",
+    "name": "Gengar",
+    "types": [
+      "Ghost",
+      "Poison"
+    ],
+    "stats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 60,
+      "spa": 130,
+      "spd": 75,
+      "spe": 110
+    },
+    "origin": "red",
+    "championships": 1,
+    "legend": true,
+    "inheritance": [
+      "hypnosis"
+    ]
+  }
+]

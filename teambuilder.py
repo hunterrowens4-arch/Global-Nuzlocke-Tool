@@ -6,28 +6,37 @@ def add_pokemon_to_roster(pokedex, roster, current_leg):
     mon = None
     while mon == None:
         species = input(
-            '\nWhat species of Pokemon did you catch?\n>> ').lower().strip()
-        if species == 'exit':
+            '\nWhat species of Pokemon did you catch? Or enter "done" to return to menu.\n>> ').lower().strip()
+        if species == 'done':
             return
-        if any(p['name'].lower() == species for p in roster):
-            print('\nThat pokemon is already in your roster.')
-            continue
+        redundant = False
+        for mon in roster:
+            if mon['name'].lower() == species:
+                if current_leg not in mon['availability']:
+                    mon['availability'].append(current_leg)
+                    print(f'\n{species.title()} is already in your roster. Current leg added to availability\n{mon['name']} ({mon['nickname']}) | Availability: {mon['availability']}.')
+                    redundant = True
+                    break
+                else:
+                    print(f'\n{species.title()} is already available in your current run.')
+                    redundant = True
+                    break
+        if redundant == True:
+            return
         nickname = input(
             '\nWhat nickname would you like to give it? (Press enter to skip)\n>> ').strip()
-        for p in pokedex:
-            if p['name']['english'].lower() == species:
-                mon = p
-            if mon:
-                base = mon.get('base', {})
-                stats = {
-                    'hp': base.get('HP', 0),
-                    'atk': base.get('Attack', 0),
-                    'def': base.get('Defense', 0),
-                    'spa': base.get('Sp. Attack', 0),
-                    'spd': base.get('Sp. Defense', 0),
-                    'spe': base.get('Speed', 0)
-                }
-                break
+        mon = get_mon_from_dex(pokedex, species)
+        if mon:
+            base = mon.get('base', {})
+            stats = {
+                'hp': base.get('HP', 0),
+                'atk': base.get('Attack', 0),
+                'def': base.get('Defense', 0),
+                'spa': base.get('Sp. Attack', 0),
+                'spd': base.get('Sp. Defense', 0),
+                'spe': base.get('Speed', 0)
+            }
+            break
 
     roster.append({
         'no': mon.get('id', 0),
@@ -43,11 +52,36 @@ def add_pokemon_to_roster(pokedex, roster, current_leg):
         'inheritance': [],
         'status': 'alive'
     })
-
     print(
         f'\nSuccessfully added {mon["name"]["english"].capitalize()} to your roster!')
     print(roster[-1])
     print(f'You now have {len(roster)} pokemon in your roster.')
+
+
+def add_pokemon_to_team(pokedex, roster, current_leg):
+    mon = None
+    while mon == None:
+        target = input('\nWho would you like to add to the team? Or enter "done" to return to the main menu.\n>> ').lower().strip()
+        mon = get_mon_from_roster(roster, target)
+        if not mon:
+            print('No Pokemon found by that name.')
+    for p in roster:
+        if p['name'] == mon['name'] and (p['status'] == 'dead' or current_leg not in p['availability']):
+            print('That Pokemon is ineligible to be on the team.')
+            return
+    team.append({
+        'no': mon['no'],
+        'nickname': mon['nickname'] if mon['nickname'] else None,
+        'name': mon['name'],
+        'types': [t.capitalize() for t in mon.get('types', [])],
+        'stats': mon['stats'],
+        'origin': mon['origin'],
+        'championships': mon['championships'],
+        'legend': mon['legend'],
+        'inheritance': mon['inheritance']
+    })
+    print(f'Successfully added {mon['nickname'].capitalize() if mon['nickname'] else mon['name']} to your team!')
+    print(team)
 
 
 def delete_pokemon(pokedex, roster, current_leg):
@@ -156,6 +190,20 @@ def evolve_pokemon(pokedex, roster, current_leg):
         print('Evolution cancelled.')
 
 
+def get_mon_from_dex(pokedex, pok,):
+    for p in pokedex:
+        if p['name']['english'].lower() == pok:
+            mon = p
+            return(mon)
+
+
+def get_mon_from_roster(roster, pok):
+    for p in roster:
+        if p['name'].lower() == pok or p['nickname'].lower() == pok:
+            mon = p
+            return(mon)
+
+
 def kill_pokemon(pokedex, roster, current_leg):
     deceased = input(
         'Which Pokemon fell in combat? (Enter nickname)\n>>').strip().lower()
@@ -181,6 +229,39 @@ def kill_pokemon(pokedex, roster, current_leg):
 def load_json(path):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
+
+
+def mark_champion(pokedex, roster, current_leg):
+    while True:
+        target = input('\nWhich Pokemon would you like to mark as a Champion? Or enter "done" to return to the menu.\n>> ').lower().strip()
+        if target == 'done':
+            break
+        n = 0
+        for mon in roster:
+            if mon['name'].lower() == target or mon['nickname'].lower() == target:
+                mon['championships'] += 1
+                n += 1
+                print(f'{mon['nickname']} ({mon['name']}) has won {mon['championships']} championships.')
+        if n == 0:
+            print('No Pokemon found by that name. Please try again.')
+
+
+def mark_legend(pokedex, roster, current_leg):
+    while True:
+        target = input('\nWhat Pokemon is growing their legacy? Or enter "done" to return to menu\n>> ').lower().strip()
+        if target == 'done':
+            break
+        n = 0
+        for mon in roster:
+            if mon['name'].lower() == target or mon['nickname'].lower() == target:
+                print('going')
+                mon['legend'] = True
+                inherit = input(f'\nWhat egg move would you like to give {mon['nickname']}?\n>> ').lower().strip()
+                mon['inheritance'].append(inherit)
+                print(f'{mon['nickname']} ({mon['name']}) has inherited {inherit}')
+                break
+        if n == 0:
+            print('\nNo Pokemon was found by that name.')
 
 
 def new_game(pokedex, roster, current_leg):
@@ -292,17 +373,15 @@ Legacy  - Show options for managing your legacy
 New     - Start a new leg, or a fresh run
 Reset   - Reset your roster
 Exit    - Save and quit
-Quit    - Exit without saving"""
+Done    - Exit without saving"""
     print(help_text)
 
 
 def show_legacy_options(pokedex, roster, current_leg):
     legacy_options = """
-            Legacy Options
---------------------------------------
-Legacy - show your legends !NOT IMPLEMENTED!
-Champion - mark a Pokemon as a champ !NOT IMPLEMENTED!
-HOF - save a team to the hall of fame !NOT IMPLEMENTED!
+           Legacy Options
+------------------------------------
+Champion - mark a Pokemon as a champ
 Legend - start a Pokemon's legacy !NOT IMPLEMENTED!
 """
     print(legacy_options)
@@ -358,6 +437,21 @@ def show_species(pokedex, roster, current_leg):
             print(f'\n{target.title()} | {target_types} | BST: {sum(target_stats_final.values())}\n[HP: {target_stats_final['hp']} | Atk: {target_stats_final['atk']} | Def: {target_stats_final['def']} | Spa: {target_stats_final['spa']} | Spd: {target_stats_final['spd']} | Spe: {target_stats_final['spe']}]')
 
 
+def show_team(pokedex, roster, current_leg):
+#    print(f'\nAverage BST: [ HP: {} | Atk: {} | Def: {} | Spa: {} | Spd: {} | Spe: {} ]')
+    while True:
+#        for p in team:
+#            print(f'{p['nickname']} ({p['name']}) | {p['types']} | Champ: {p['championships']}')
+        print('\nWhat would you like to do with your team?')
+        team_choice = input('(add / remove / bst / done)\n>> ').lower().strip()
+        if team_choice in team_commands:
+            team_commands[team_choice](pokedex, roster, current_leg)
+        elif team_choice == 'done':
+            break
+        else:
+            print('Invalid choice, please enter a valid selection.')
+
+
 def show_type(pokedex, roster, current_leg):
     n = 0
     target_type = input('\nWhat type would you like to see?\n>> ').capitalize()
@@ -387,6 +481,7 @@ commands = {
     'analyze': show_analysis_options,
     'available': show_available,
     'bst': show_bst,
+    'champion': mark_champion,
     'dead': show_dead,
     'delete': delete_pokemon,
     'edit': edit_nickname,
@@ -394,9 +489,11 @@ commands = {
     'help': show_help,
     'kill': kill_pokemon,
     'legacy': show_legacy_options,
+    'legend': mark_legend,
     'reset': reset_roster,
     'roster': show_roster,
     'species': show_species,
+    'team': show_team,
     'type': show_type,
 }
 
@@ -416,12 +513,19 @@ roster_commands = {
 }
 
 
+team_commands = {
+    'add': add_pokemon_to_team,
+}
+
+
 types = ['normal', 'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy']
 
 
 config = load_json('data/config.json')
 pokedex = load_json('data/pokedex.json')
 roster = load_json('data/roster.json')
+# team = load_json('data/team.json')
+team = []
 
 current_leg = config['current_leg']
 
@@ -446,15 +550,19 @@ while True:
         commands[action](pokedex, roster, current_leg)
     elif action == 'new':
         current_leg = new_game(pokedex, roster, current_leg)
-    elif action == 'quit':
+    elif action == 'done':
         print('Exiting without saving...\n')
         break
     elif action == 'exit':
+        roster_sorted = sorted(roster, key=lambda x: x['name'])
         print('Saving and exiting...')
         shutil.copy('data/roster.json',
                     f'data/roster_backup_{current_leg}.json')
         with open('data/roster.json', 'w', encoding='utf-8') as f:
-            json.dump(roster, f, indent=2)
+            json.dump(roster_sorted, f, indent=2)
+#        shutil.copy('data/team.json', f'data/team_backup_{current_leg}.json')
+        with open('data/team.json', 'w', encoding='utf-8') as f:
+            json.dump(team, f, indent=2)
         shutil.copy('data/config.json',
                     f'data/config_backup_{current_leg}.json')
         with open('data/config.json', 'w', encoding='utf-8') as f:
