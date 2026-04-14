@@ -147,47 +147,43 @@ def edit_nickname(pokedex, roster, current_leg):
 
 def evolve_pokemon(pokedex, roster, current_leg):
     target = input(
-        '\nWhich Pokemon would you like to evolve? (Enter nickname or species)\n>>').strip().lower()
+        '\nWhich Pokemon would you like to evolve? (Enter nickname or species, or "done" to return to the main menu)\n>> ').strip().lower()
     mon = None
+    nickname = None
+    mon = get_mon_from_dex(pokedex, target)
     for p in roster:
-        if p['nickname'].lower() == target:
-            mon = p
-            break
-        elif p['name'].lower() == target:
-            mon = p
-            break
+        if p['name'] == mon['name']['english']:
+            nickname = p['nickname']
     if not mon:
-        print(f'No Pokemon by that name or species was found in the roster.')
+        print('No Pokemon by that name or species was found in the roster.')
         return
-    evo_no = mon['no'] + 1
-    evo = None
-    for p in pokedex:
-        if p['id'] == evo_no:
-            evo = p
-            break
-    if not evo:
-        print(
-            f'{mon["name"]} cannot evolve or its evolution is not in the pokedex.')
-        return
-    confirmation = input(
-        f'\nAre you sure you want to evolve {mon["nickname"] if mon["nickname"] else mon["name"]} into {evo["name"]["english"]}? (y/n)\n>>').strip().lower()
-    if confirmation == 'y':
-        mon['no'] = evo['id']
-        mon['name'] = evo['name']['english'].capitalize()
-        mon['types'] = [t.capitalize() for t in evo.get('type', [])]
-        base = evo.get('base', {})
-        mon['stats'] = {
-            'hp': base.get('HP', 0),
-            'atk': base.get('Attack', 0),
-            'def': base.get('Defense', 0),
-            'spa': base.get('Sp. Attack', 0),
-            'spd': base.get('Sp. Defense', 0),
-            'spe': base.get('Speed', 0)
-        }
-        print(
-            f'\nSuccessfully evolved into {mon["name"]}!')
+    if mon['evolutions']['to']:
+        evo_target = mon['evolutions']['to'].lower()
+    elif mon['name']['english'] == mon['evolutions']['first']:
+        print('This Pokemon cannot evolve. Returning to main menu ...')
     else:
-        print('Evolution cancelled.')
+        devo_confirm = input(f'\nWould you like to de-volve {nickname} to {mon['evolutions']['first']}? (y/n)\n>> ').lower().strip()
+        if devo_confirm == 'y':
+            evo_target = mon['evolutions']['first'].lower()
+        else:
+            return
+    evo = get_mon_from_dex(pokedex, evo_target)
+    confirm = input(f'\nAre you sure you want to evolve {nickname} into {evo['name']['english']}? (y/n)\n>> ').lower().strip()
+    if confirm == 'n':
+        print('Evolution cancelled. Returning to menu ...')
+        return
+    for p in roster:
+        if p['name'] == mon['name']['english']:
+            p['no'] = evo['id']
+            p['name'] = evo['name']['english']
+            p['types'] = evo['type']
+            p['stats'] = evo['base']
+            break
+    print(f'\nSuccessfully evolved {nickname} into {evo['name']['english']}!')
+    if len(evo['type']) == 2:
+        print(f'{evo['type'][0]} / {evo['type'][1]} - BST = HP: {evo['base']['HP']} | Atk: {evo['base']['Attack']} | Def: {evo['base']['Defense']} | Spa: {evo['base']['Sp. Attack']} | Spd: {evo['base']['Sp. Defense']} | Spe: {evo['base']['Speed']}')
+    else:
+        print(f'{evo['type'][0]} - BST = HP: {evo['base']['HP']} | Atk: {evo['base']['Attack']} | Def: {evo['base']['Defense']} | Spa: {evo['base']['Sp. Attack']} | Spd: {evo['base']['Sp. Defense']} | Spe: {evo['base']['Speed']}')
 
 
 def get_mon_from_dex(pokedex, pok,):
@@ -299,15 +295,6 @@ def show_alive(pokedex, roster, current_leg):
         n += 1
     print(f'You have {n} living Pokemon.')
 
-
-def show_analysis_options(pokedex, roster, current_leg):
-    analysis_options = """
-                                       Analysis Options
-------------------------------------------------------------------------------------------------
-Coverage - show your type coverage + recommend Pokemon to add to your team based on coverage !NOT IMPLEMENTED!
-Weakness - show your type weaknesses + recommend Pokemon to add to your team based on weaknesses !NOT IMPLEMENTED!
-BST - show your team's base stat total + recommend Pokemon to add to your team based on BST !NOT IMPLEMENTED!
-"""
     print(analysis_options)
 
 
@@ -333,8 +320,19 @@ def show_bst(pokedex, roster, current_leg):
             print('Invalid selection, please provide a valid selection.')
         sorted_stat_list = sorted(stat_list, key=lambda x: x[2], reverse=True)
         for mon in sorted_stat_list:
-            print(f'\n{mon[0]} - {mon[1]}, {stat.capitalize()}: {mon[2]}')
+            print(f'{mon[0]} - {mon[1]}, {stat.capitalize()}: {mon[2]}')
         break
+
+
+def show_championships(pokedex, roster, current_leg):
+    n = 0
+    for p in roster:
+        if p['championships'] > 0:
+            n += 1
+            if len(p['types']) == 2:
+                print(f'{p['nickname']} ({p['name']}) | {p['types'][0]} / {p['types'][1]} | {p['status'].title()} | {p['championships']}')
+            else:
+                print(f'{p['nickname']} ({p['name']}) | {p['types'][0]} | {p['status'].title()} | Championships: {p['championships']}')
 
 
 def show_dead(pokedex, roster, current_leg):
@@ -355,9 +353,8 @@ Alive         - Show all alive pokemon in your roster
 Dead          - Show all dead pokemon in your roster
 Type          - Show pokemon in your roster by type
 Availabile    - Show pokemon in your roster by availability
-Championships - Show pokemon in your roster by championship count !NOT IMPLEMENTED!
-BST           - Show pokemon in your roster by base stat total !NOT IMPLEMENTED!
-"""
+Championships - Show pokemon in your roster by championship count
+BST           - Show pokemon in your roster by base stat total"""
     print(filter_options)
 
 
@@ -382,7 +379,7 @@ def show_legacy_options(pokedex, roster, current_leg):
            Legacy Options
 ------------------------------------
 Champion - mark a Pokemon as a champ
-Legend - start a Pokemon's legacy !NOT IMPLEMENTED!
+Legend   - start a Pokemon's legacy
 """
     print(legacy_options)
 
@@ -438,10 +435,12 @@ def show_species(pokedex, roster, current_leg):
 
 
 def show_team(pokedex, roster, current_leg):
-#    print(f'\nAverage BST: [ HP: {} | Atk: {} | Def: {} | Spa: {} | Spd: {} | Spe: {} ]')
     while True:
-#        for p in team:
-#            print(f'{p['nickname']} ({p['name']}) | {p['types']} | Champ: {p['championships']}')
+        for p in team:
+            if len(p['types']) == 2:
+                print(f'{p['nickname']} ({p['name']}) | {p['types'][0]} / {p['types'][1]} | Champ: {p['championships']}')
+            else:
+                print(f'{p['nickname']} ({p['name']}) | {p['types'][0]} | Champ: {p['championships']}')
         print('\nWhat would you like to do with your team?')
         team_choice = input('(add / remove / bst / done)\n>> ').lower().strip()
         if team_choice in team_commands:
@@ -478,10 +477,10 @@ def show_type(pokedex, roster, current_leg):
 commands = {
     'add': add_pokemon_to_roster,
     'alive': show_alive,
-    'analyze': show_analysis_options,
     'available': show_available,
     'bst': show_bst,
     'champion': mark_champion,
+    'championships': show_championships,
     'dead': show_dead,
     'delete': delete_pokemon,
     'edit': edit_nickname,
@@ -503,6 +502,7 @@ roster_commands = {
     'alive': show_alive,
     'available': show_available,
     'bst': show_bst,
+    'championships': show_championships,
     'dead': show_dead,
     'delete': delete_pokemon,
     'edit': edit_nickname,
@@ -524,8 +524,7 @@ types = ['normal', 'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poi
 config = load_json('data/config.json')
 pokedex = load_json('data/pokedex.json')
 roster = load_json('data/roster.json')
-# team = load_json('data/team.json')
-team = []
+team = load_json('data/team.json')
 
 current_leg = config['current_leg']
 
@@ -560,7 +559,7 @@ while True:
                     f'data/roster_backup_{current_leg}.json')
         with open('data/roster.json', 'w', encoding='utf-8') as f:
             json.dump(roster_sorted, f, indent=2)
-#        shutil.copy('data/team.json', f'data/team_backup_{current_leg}.json')
+        shutil.copy('data/team.json', f'data/team_backup_{current_leg}.json')
         with open('data/team.json', 'w', encoding='utf-8') as f:
             json.dump(team, f, indent=2)
         shutil.copy('data/config.json',
@@ -577,8 +576,14 @@ while True:
         print('Invalid action. Type "Help" for a list of options.')
 
 # way later ideas:
-#     team functionality
 #     recommend optimal team of 6
 #     risk analysis before important battles
 #     web based version / GUI / mobile app
 #     validate that evolutions are possible based on current leg and pokedex data (ie no gen 2 evos in gen 1, allowing Golbat => Crobat instead of => Oddish, etc)
+#     team analysis
+#       bst
+#       type
+#           weakness
+#           coverage
+#     team refresh following evo
+#     standardize horizontal print lengths on team and roster prints for readability

@@ -17,6 +17,11 @@
       "Sp. Attack": 65,
       "Sp. Defense": 65,
       "Speed": 45
+    },
+    "evolutions": {
+      "first": "Bulbasaur",
+      "from": null,
+      "to": "Ivysaur"
     }
   },
   {
@@ -38,6 +43,11 @@
       "Sp. Attack": 80,
       "Sp. Defense": 80,
       "Speed": 60
+    },
+    "evolutions": {
+      "first": "Bulbasaur",
+      "from": "Bulbasaur",
+      "to": "Venusaur"
     }
   },
   {
@@ -59,6 +69,11 @@
       "Sp. Attack": 100,
       "Sp. Defense": 100,
       "Speed": 80
+    },
+    "evolutions": {
+      "first": "Bulbasaur",
+      "from": "Ivysaur",
+      "to": null
     }
   },
   {
